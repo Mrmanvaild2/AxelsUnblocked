@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>My Games Portal</title>
+  <style>
+    body { font-family: system-ui, Arial; margin:0; padding:0; display:flex; flex-direction:column; min-height:100vh; }
+    header { background:#222; color:#fff; padding:12px 18px; display:flex; align-items:center; justify-content:space-between; }
+    .games { display:grid; gap:12px; padding:18px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+    .card { background:#f7f7f7; border-radius:8px; padding:12px; box-shadow: 0 2px 6px rgba(0,0,0,.08); }
+    .thumb { height:140px; background:#ddd; border-radius:6px; margin-bottom:10px; display:flex; align-items:center; justify-content:center; color:#666; }
+    .playFrame { width:100%; height:70vh; border:0; }
+    footer { margin-top:auto; padding:10px 18px; font-size:13px; color:#666; }
+    @media (max-width:600px){ .playFrame { height:60vh; } }
+  </style>
+</head>
+<body>
+  <header>
+    <h1 style="margin:0;font-size:18px;">My Games Portal</h1>
+    <nav><a href="#" style="color:#fff; text-decoration:none; margin-left:12px;">Home</a></nav>
+  </header>
+
+  <main>
+    <section class="games" id="gamesList">
+      <!-- Cards will be injected by JS -->
+    </section>
+
+    <!-- Example play area (hidden until a game is selected) -->
+    <div id="playArea" style="display:none; padding:18px;">
+      <button id="backBtn">← Back to games</button>
+      <iframe id="gameFrame" class="playFrame" src="" allow="fullscreen"></iframe>
+    </div>
+  </main>
+
+  <footer>© My Games Portal — All rights reserved</footer>
+
+  <script>
+    const games = [
+      { id:'g1', title:'Demo Game', thumb:'', url:'/games/demo/index.html' },
+      { id:'g2', title:'Another Game', thumb:'', url:'/games/another/index.html' }
+    ];
+
+    const list = document.getElementById('gamesList');
+    games.forEach(g=>{
+      const div = document.createElement('div');
+      div.className='card';
+      div.innerHTML = `
+        <div class="thumb">${g.title}</div>
+        <strong>${g.title}</strong>
+        <p style="margin:8px 0 0;"><button data-url="${g.url}">Play</button></p>
+      `;
+      list.appendChild(div);
+    });
+
+    document.addEventListener('click', e=>{
+      if(e.target.matches('button[data-url]')){
+        const url = e.target.dataset.url;
+        document.getElementById('playArea').style.display='block';
+        document.getElementById('gamesList').style.display='none';
+        document.getElementById('gameFrame').src = url;
+      }
+      if(e.target.id==='backBtn'){
+        document.getElementById('playArea').style.display='none';
+        document.getElementById('gamesList').style.display='';
+        document.getElementById('gameFrame').src = '';
+      }
+    });
+  </script>
+</body>
+</html>
